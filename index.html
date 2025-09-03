@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Encuesta Cannabis Medicinal – Ingeniería UNCuyo</title>
+  <meta name="description" content="Proyecto Final – Ingeniería Industrial UNCuyo. Encuesta anónima sobre cannabis medicinal y resultados abiertos a la comunidad." />
+  <!-- Tailwind Play CDN (para prototipos; si después querés build real, migrás a Tailwind con build) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Fuente -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <!-- Iconos -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- PapaParse para CSV -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <!-- Chart.js para gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root{
+      --bg: #0f172a;           /* slate-900 */
+      --card: #0b1226cc;       /* slate-950/80 */
+      --brand: #14b8a6;        /* teal-500 */
+      --brand-600:#0d9488;     /* teal-600 */
+      --accent:#f5e6c5;        /* arena suave */
+    }
+    body{ font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"; background: radial-gradient(1200px 800px at 10% 10%, #0a1a2a 0%, #0f172a 35%, #0b1226 100%); color: #e5e7eb;}
+    .glass{ backdrop-filter: blur(10px); background: linear-gradient(180deg, rgba(11,18,38,.7), rgba(11,18,38,.5)); border:1px solid rgba(255,255,255,.06); }
+    .brand-grad{ background: linear-gradient(135deg, var(--brand) 0%, #22c55e 100%); }
+    .ring-brand{ box-shadow: 0 0 0 2px rgba(20,184,166,.25); }
+    .shadow-soft{ box-shadow: 0 10px 35px rgba(0,0,0,.35); }
+    .pill{ border:1px solid rgba(255,255,255,.1); }
+    .badge{ background: rgba(20,184,166,.12); border:1px solid rgba(20,184,166,.4); color:#99f6e4;}
+    .link{ color: var(--brand); }
+    .link:hover{ color: #99f6e4; }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header class="sticky top-0 z-50 bg-slate-950/60 backdrop-blur border-b border-white/5">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl brand-grad shadow-soft"></div>
+        <div class="text-sm md:text-base">
+          <div class="font-semibold tracking-tight">Proyecto Final · Ingeniería Industrial · UNCuyo</div>
+          <div class="text-slate-400 -mt-0.5">Encuesta y resultados abiertos</div>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-slate-300">
+        <a href="#encuesta" class="hover:text-white">Encuesta</a>
+        <a href="#resultados" class="hover:text-white">Resultados</a>
+        <a href="#sobre" class="hover:text-white">Sobre el proyecto</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="relative">
+    <div class="max-w-6xl mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center">
+      <div>
+        <span class="badge text-xs px-3 py-1 rounded-full">Anónimo · Abierto · Colaborativo</span>
+        <h1 class="mt-4 text-4xl md:text-5xl font-bold leading-tight">
+          Encuesta sobre <span class="text-teal-400">cannabis medicinal</span> en Argentina
+        </h1>
+        <p class="mt-4 text-slate-300">
+          Somos estudiantes de <strong>Ingeniería Industrial (UNCuyo)</strong>. Esta encuesta es
+          <strong>anónima</strong>, no solicita datos personales y sus resultados serán publicados
+          para acceso de la comunidad. Tu participación ayuda a <strong>visibilizar el cannabis como medicina</strong>
+          y a <strong>desestigmatizar</strong> su uso terapéutico.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#encuesta" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg brand-grad text-slate-900 font-semibold shadow-soft">
+            <i data-lucide="clipboard-list" class="w-4 h-4"></i> Responder encuesta
+          </a>
+          <a href="#resultados" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg pill text-slate-200">
+            <i data-lucide="bar-chart-3" class="w-4 h-4"></i> Ver resultados (cuando estén)
+          </a>
+        </div>
+        <p class="mt-4 text-xs text-slate-400">
+          Si este proyecto alcanza buenos resultados, será el primero de la Facultad de Ingeniería de UNCuyo en abordar esta temática.
+        </p>
+      </div>
+      <div class="glass rounded-2xl p-6 shadow-soft ring-brand">
+        <div class="text-slate-200 font-semibold mb-2">¿Qué vas a encontrar?</div>
+        <ul class="space-y-3 text-sm text-slate-300">
+          <li class="flex gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-teal-400"></i> Formulario simple (5–7 minutos) en secciones para usuarios y no usuarios.</li>
+          <li class="flex gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-teal-400"></i> Total confidencialidad: sin datos privados ni identificatorios.</li>
+          <li class="flex gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-teal-400"></i> Publicación abierta de resultados y hallazgos.</li>
+        </ul>
+        <div class="mt-5 text-xs text-slate-400 border-t border-white/10 pt-4">
+          Proyecto aprobado en el marco del **Proyecto Final de Estudios**. Para dudas, escribí al equipo (mail en el pie de página).
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENCUESTA -->
+  <section id="encuesta" class="py-16 bg-gradient-to-b from-slate-950/60 to-slate-950/30 border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center gap-3 mb-6">
+        <i data-lucide="clipboard-list" class="w-6 h-6 text-teal-400"></i>
+        <h2 class="text-2xl md:text-3xl font-bold">Responder la encuesta</h2>
+      </div>
+      <div class="grid md:grid-cols-3 gap-6 items-start">
+        <div class="md:col-span-2 glass rounded-xl p-3 shadow-soft ring-brand">
+          <!-- Reemplazá el src del iframe con el enlace público de tu Google Forms -->
+          <div class="aspect-[4/3] w-full rounded-lg overflow-hidden border border-white/10">
+            <iframe
+              title="Encuesta cannabis medicinal"
+              src="https://docs.google.com/forms/d/e/1FAIpQLSf_placeholder/viewform?embedded=true"
+              width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+          </div>
+        </div>
+        <aside class="glass rounded-xl p-5 space-y-4">
+          <div class="text-slate-200 font-semibold">Privacidad</div>
+          <p class="text-sm text-slate-300">La encuesta es <strong>anónima</strong>. No pedimos nombre, DNI, email ni datos sensibles.</p>
+          <div class="text-slate-200 font-semibold">Tiempo estimado</div>
+          <p class="text-sm text-slate-300">5 a 7 minutos.</p>
+          <div class="text-slate-200 font-semibold">Objetivo</div>
+          <p class="text-sm text-slate-300">Generar evidencia para el Proyecto Final y publicar resultados abiertos a la comunidad.</p>
+          <a href="#sobre" class="inline-flex items-center gap-2 text-sm link">
+            Conocer más del proyecto <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="resultados" class="py-16">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex items-center gap-3 mb-6">
+        <i data-lucide="bar-chart-3" class="w-6 h-6 text-teal-400"></i>
+        <h2 class="text-2xl md:text-3xl font-bold">Resultados (se irán publicando acá)</h2>
+      </div>
+
+      <!-- Cargador de CSV -->
+      <div class="glass rounded-xl p-5 shadow-soft ring-brand">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div class="font-semibold">Subir resultados (CSV)</div>
+            <p class="text-sm text-slate-400">Podés exportar respuestas de Google Forms/Sheets a CSV y subirlo para visualizar gráficos y tablas.</p>
+          </div>
+          <label class="inline-flex items-center gap-3 cursor-pointer">
+            <input id="fileInput" type="file" accept=".csv" class="hidden" />
+            <span class="px-4 py-2 rounded-lg brand-grad text-slate-900 font-semibold shadow-soft"><i data-lucide="upload" class="w-4 h-4 inline-block -mt-0.5 mr-1"></i> Subir CSV</span>
+          </label>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="grid md:grid-cols-2 gap-6 mt-6">
+          <div class="glass rounded-lg p-4">
+            <div class="text-sm text-slate-300 mb-2">Distribución (ejemplo: “Canal de acceso preferido”)</div>
+            <canvas id="chart1" height="220"></canvas>
+          </div>
+          <div class="glass rounded-lg p-4">
+            <div class="text-sm text-slate-300 mb-2">Intención de uso (ejemplo Likert)</div>
+            <canvas id="chart2" height="220"></canvas>
+          </div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="mt-6 overflow-auto rounded-lg border border-white/10">
+          <table id="dataTable" class="min-w-full text-sm">
+            <thead class="bg-white/5">
+              <tr id="dataHead"></tr>
+            </thead>
+            <tbody id="dataBody" class="divide-y divide-white/5"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-400 mt-3">Nota: los gráficos leen columnas *ejemplo*. Podés mapearlas a los nombres reales de tu CSV dentro del script.</p>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre" class="py-16 bg-gradient-to-b from-slate-950/40 to-slate-950/20 border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8">
+      <div class="glass rounded-xl p-6 shadow-soft">
+        <h3 class="text-xl font-semibold mb-2">Sobre el proyecto</h3>
+        <p class="text-slate-300">
+          Proyecto Final de **Ingeniería Industrial – UNCuyo**. Buscamos generar evidencia útil para clínicas,
+          farmacias y decisores, y abrir los resultados a la comunidad para promover un debate informado sobre
+          el cannabis como medicina.
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-300">
+          <li class="flex gap-2"><i data-lucide="target" class="w-4 h-4 mt-0.5 text-teal-400"></i> Metodología rigurosa y enfoque aplicado.</li>
+          <li class="flex gap-2"><i data-lucide="shield-check" class="w-4 h-4 mt-0.5 text-teal-400"></i> Privacidad y ética en el manejo de datos.</li>
+          <li class="flex gap-2"><i data-lucide="share-2" class="w-4 h-4 mt-0.5 text-teal-400"></i> Publicación abierta de hallazgos y materiales.</li>
+        </ul>
+      </div>
+      <div class="glass rounded-xl p-6 shadow-soft">
+        <h3 class="text-xl font-semibold mb-2">Contacto</h3>
+        <p class="text-slate-300">¿Dudas o sugerencias? Escribinos:</p>
+        <ul class="mt-3 text-sm text-slate-300 space-y-2">
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-teal-400"></i> equipo.proyecto@ingenieria.uncuyo.edu.ar</li>
+          <li class="flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4 text-teal-400"></i> @proyecto.cannabis.uncuyo</li>
+        </ul>
+        <p class="text-xs text-slate-400 mt-4">Este sitio no almacena información personal. El formulario embebido pertenece a Google y su política de privacidad aplica a esa sección.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="py-10 border-t border-white/5">
+    <div class="max-w-6xl mx-auto px-4 text-sm text-slate-400 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div>© <span id="year"></span> — Ingeniería Industrial · UNCuyo</div>
+      <div class="flex gap-4">
+        <a class="link" href="#encuesta">Encuesta</a>
+        <a class="link" href="#resultados">Resultados</a>
+        <a class="link" href="#sobre">Sobre</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // Iconos
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Charts placeholders
+    let chart1, chart2;
+    function makeCharts(labels, valuesLikert){
+      const ctx1 = document.getElementById('chart1');
+      const ctx2 = document.getElementById('chart2');
+      // Si existen, destruir para recrear
+      if(chart1) chart1.destroy();
+      if(chart2) chart2.destroy();
+
+      // Gráfico 1: Canal de acceso preferido (ejemplo)
+      chart1 = new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+          labels: labels || ['Farmacia', 'ONG/Club', 'Autocultivo', 'Otro'],
+          datasets: [{ data: [40, 25, 28, 7] }]
+        },
+        options: {
+          plugins: { legend: { labels: { color: '#cbd5e1' } } }
+        }
+      });
+
+      // Gráfico 2: Intención de uso Likert (ejemplo)
+      chart2 = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['Muy probable','Probable','Neutral','Poco probable','Nada probable'],
+          datasets: [{ data: valuesLikert || [35, 30, 18, 10, 7] }]
+        },
+        options: {
+          scales: {
+            x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,.06)' } },
+            y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,.06)' } }
+          },
+          plugins: { legend: { display:false } }
+        }
+      });
+    }
+    makeCharts();
+
+    // Tabla vacía
+    function clearTable(){
+      document.getElementById('dataHead').innerHTML = '';
+      document.getElementById('dataBody').innerHTML = '';
+    }
+    function renderTable(headers, rows){
+      const head = document.getElementById('dataHead');
+      const body = document.getElementById('dataBody');
+      head.innerHTML = headers.map(h=>`<th class="text-left px-3 py-2 font-semibold">${h}</th>`).join('');
+      body.innerHTML = rows.map(r=>`<tr class="hover:bg-white/5">${r.map(c=>`<td class="px-3 py-2 text-slate-300">${c}</td>`).join('')}</tr>`).join('');
+    }
+
+    // CSV Upload: mapeo básico (ajustá columnas a tus nombres reales)
+    document.getElementById('fileInput').addEventListener('change', (e)=>{
+      const file = e.target.files?.[0];
+      if(!file) return;
+      Papa.parse(file, {
+        header: true,
+        skipEmptyLines: true,
+        complete: (res)=>{
+          const data = res.data;
+          // Render tabla (primeras 500 filas para no romper UI)
+          const headers = res.meta.fields || Object.keys(data[0]||{});
+          const rows = data.slice(0,500).map(row=>headers.map(h=>row[h] ?? ''));
+          clearTable();
+          renderTable(headers, rows);
+
+          // Intento de auto-mapeo (ajustá según tus columnas)
+          // Busco columnas por nombre aproximado
+          const keys = headers.map(h=>h.toLowerCase());
+          const canalKey = headers[keys.findIndex(k=>k.includes('canal') && (k.includes('acceso')||k.includes('prefer') ))] || null;
+          const likertKey = headers[keys.findIndex(k=> (k.includes('intencion')||k.includes('intención')||k.includes('probable')) )] || null;
+
+          // Doughnut: conteo por canal
+          if(canalKey){
+            const counts = {};
+            data.forEach(d=>{
+              const v = (d[canalKey] || '').toString().trim();
+              if(!v) return;
+              counts[v] = (counts[v]||0)+1;
+            });
+            const lbls = Object.keys(counts);
+            const vals = Object.values(counts);
+            // reusa makeCharts pasando labels y usa likert default hasta procesar
+            makeCharts(lbls);
+          }
+
+          // Likert: mapeo a orden
+          if(likertKey){
+            const order = ['Muy probable','Probable','Neutral','Poco probable','Nada probable'];
+            const buckets = Object.fromEntries(order.map(o=>[o,0]));
+            data.forEach(d=>{
+              const v = (d[likertKey]||'').toString().trim();
+              if(!v) return;
+              // intento normalizar
+              const norm = order.find(o=>v.toLowerCase().includes(o.split(' ')[0].toLowerCase())) || null;
+              if(norm) buckets[norm]++;
+            });
+            const vals = order.map(o=>buckets[o]);
+            // recrea gráfico 2 con estos datos
+            const ctx2 = document.getElementById('chart2');
+            if(chart2) chart2.destroy();
+            chart2 = new Chart(ctx2, {
+              type: 'bar',
+              data: { labels: order, datasets: [{ data: vals }]},
+              options: {
+                scales: {
+                  x: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,.06)' } },
+                  y: { ticks: { color: '#cbd5e1' }, grid: { color: 'rgba(255,255,255,.06)' } }
+                },
+                plugins: { legend: { display:false } }
+              }
+            });
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
