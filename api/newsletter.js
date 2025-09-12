@@ -4,12 +4,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email } = JSON.parse(req.body);
+    // Ya viene parseado como objeto
+    const { email } = req.body;
 
-    // Endpoint de tu Apps Script
     const scriptUrl = "https://script.google.com/macros/s/AKfycbz5SvHcZcghuJckek52SMeBVYecd_KiuWjCyqcFJnpieKs5wZ3UnrTBaP_XYoz_auax/exec";
 
-    // Reenvío al Apps Script
     const response = await fetch(scriptUrl, {
       method: "POST",
       body: JSON.stringify({ email }),
