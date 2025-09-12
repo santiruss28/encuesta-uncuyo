@@ -129,15 +129,32 @@
         <div class="md:col-span-2">
           <p class="text-slate-300 mb-4">Dejanos tu correo para avisarte cuando publiquemos resultados y próximos hitos. Guardamos solo tu email para este fin.</p>
           <!-- ⚠️ Reemplazá action por tu endpoint (Formspree u otro) -->
-          <form id="newsletterForm" action="https://formspree.io/f/TU_ID" method="POST" class="grid sm:grid-cols-3 gap-3">
-            <input type="email" name="email" required placeholder="tuemail@dominio.com"
-                   class="sm:col-span-2 px-4 py-3 rounded-lg bg-slate-900/60 border border-white/10 text-slate-200 focus:outline-none focus:border-teal-500"
-                   aria-label="Correo electrónico">
-            <button class="px-4 py-3 rounded-lg brand-grad text-slate-900 font-semibold shadow-soft" type="submit">
-              Suscribirme
-            </button>
-            <input type="hidden" name="_subject" value="Nueva suscripción – Encuesta UNCuyo">
+          <form id="newsletterForm">
+            <input type="email" name="email" required placeholder="tuemail@dominio.com">
+            <button type="submit">Suscribirme</button>
           </form>
+          <p id="newsletterMsg"></p>
+          <script>
+          document.getElementById("newsletterForm").addEventListener("submit", async (e)=>{
+            e.preventDefault();
+            const email = e.target.email.value;
+            const msg = document.getElementById("newsletterMsg");
+          
+            try {
+              const res = await fetch("https://script.google.com/macros/s/AKfycbybQfkYZDl_oY9sYERKDRilXystzO8gncy5odN7MzXNMT2fAjYpbc9g6lrmNhbOMp8R/exec", {
+                method: "POST",
+                body: JSON.stringify({ email }),
+                headers: { "Content-Type": "application/json" }
+              });
+              const text = await res.text();
+              msg.textContent = (text === "OK") ? "¡Gracias por suscribirte!" : "Error: " + text;
+              msg.style.color = (text === "OK") ? "lightgreen" : "red";
+            } catch(err){
+              msg.textContent = "Error de conexión";
+              msg.style.color = "red";
+            }
+          });
+          </script>
           <p id="newsletterMsg" class="text-sm mt-2 text-slate-400"></p>
         </div>
         <div class="glass rounded-lg p-4">
@@ -162,8 +179,7 @@
             <div class="text-sm text-slate-300 mb-2">Distribución</div>
             <div class="overlay rounded-lg">
               <div>
-                <div class="tag uppercase tracking-wide text-xs text-teal-200/80 mb-1">Resultados preliminares</div>
-                <div class="text-slate-100 font-medium">Gráfico difuminado para evitar falsas expectativas.<br/>Subí el CSV para ver datos reales.</div>
+                <div class="tag uppercase tracking-wide text-xs text-teal-200/80 mb-1">Resultados disponibles una vez finalizada la encuesta</div>
               </div>
             </div>
             <canvas id="chart1" class="blur-target" height="220"></canvas>
@@ -172,8 +188,7 @@
             <div class="text-sm text-slate-300 mb-2">Resultados</div>
             <div class="overlay rounded-lg">
               <div>
-                <div class="tag uppercase tracking-wide text-xs text-teal-200/80 mb-1">Resultados preliminares</div>
-                <div class="text-slate-100 font-medium">Subí el CSV para desbloquear los gráficos.</div>
+                <div class="tag uppercase tracking-wide text-xs text-teal-200/80 mb-1">Resultados disponibles una vez finalizada la encuesta</div>
               </div>
             </div>
             <canvas id="chart2" class="blur-target" height="220"></canvas>
@@ -189,7 +204,6 @@
         </div>
       </div>
 
-      <p class="text-xs text-slate-400 mt-3">Nota: los gráficos comienzan blurreados con datos de ejemplo. Se desbloquean al cargar datos reales.</p>
     </div>
   </section>
 
@@ -209,7 +223,7 @@
           <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-teal-400"></i> equipo.proyecto@ingenieria.uncuyo.edu.ar</li>
           <li class="flex items-center gap-2"><i data-lucide="instagram" class="w-4 h-4 text-teal-400"></i> @proyecto.cannabis.uncuyo</li>
         </ul>
-        <p class="text-xs text-slate-400 mt-4">Este sitio no almacena respuestas de la encuesta. El formulario embebido pertenece a Google y su política aplica allí.</p>
+        <p class="text-xs text-slate-400 mt-4">Este sitio no almacena respuestas de la encuesta. El formulario embebido pertenece a Google.</p>
       </div>
     </div>
   </section>
