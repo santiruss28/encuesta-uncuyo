@@ -145,11 +145,12 @@
             const msg = document.getElementById("newsletterMsg");
           
             try {
-              const res = await fetch("https://script.google.com/macros/s/AKfycbz5SvHcZcghuJckek52SMeBVYecd_KiuWjCyqcFJnpieKs5wZ3UnrTBaP_XYoz_auax/exec", {
+              const res = await fetch("/api/newsletter", {
                 method: "POST",
                 body: JSON.stringify({ email }),
                 headers: { "Content-Type": "application/json" }
               });
+
               const text = await res.text();
               msg.textContent = (text === "OK") ? "¡Gracias por suscribirte!" : "Error: " + text;
               msg.style.color = (text === "OK") ? "lightgreen" : "red";
