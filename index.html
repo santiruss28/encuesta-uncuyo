@@ -232,18 +232,77 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
+   <!-- FOOTER -->
   <footer class="py-10 border-t border-white/5">
-    <div class="max-w-6xl mx-auto px-4 text-sm text-slate-400 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <div>© <span id="year"></span> — Ingeniería Industrial · UNCuyo</div>
-      <div class="flex gap-4">
-        <a class="link" href="#encuesta">Encuesta</a>
-        <a class="link" href="#novedades">Novedades</a>
-        <a class="link" href="#resultados">Resultados</a>
-        <a class="link" href="#sobre">Sobre</a>
+    <div class="max-w-6xl mx-auto px-4 text-sm text-slate-400 flex flex-col gap-6">
+
+      <!-- Quiénes somos -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="space-y-1">
+          <div class="text-slate-300 font-medium">Autores del proyecto</div>
+          <p class="text-xs text-slate-500">
+            Estudiantes de Ingeniería Industrial — UNCuyo. Este proyecto forma parte del Trabajo Final de Carrera y busca abrir datos y conocimiento sobre el cannabis medicinal en Argentina.
+          </p>
+        </div>
+
+        <ul class="flex flex-wrap items-center gap-4">
+          <!-- Josefina -->
+          <li class="flex items-center gap-2 group">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 border border-white/10 text-[11px] text-slate-300">JB</span>
+            <a
+              href="http://www.linkedin.com/in/josefinabalverdealonso"
+              target="_blank" rel="noopener"
+              class="inline-flex items-center gap-1.5 hover:text-[#0A66C2] transition-colors"
+              aria-label="LinkedIn de Josefina Balverde Alonso (se abre en una nueva pestaña)"
+            >
+              <i data-lucide="linkedin" class="w-4 h-4 transition-colors group-hover:text-[#0A66C2]"></i>
+              <span>Josefina Balverde Alonso</span>
+            </a>
+          </li>
+
+          <!-- Tomás -->
+          <li class="flex items-center gap-2 group">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 border border-white/10 text-[11px] text-slate-300">TG</span>
+            <a
+              href="https://www.linkedin.com/in/tomas-garignani/"
+              target="_blank" rel="noopener"
+              class="inline-flex items-center gap-1.5 hover:text-[#0A66C2] transition-colors"
+              aria-label="LinkedIn de Tomás Garignani (se abre en una nueva pestaña)"
+            >
+              <i data-lucide="linkedin" class="w-4 h-4 transition-colors group-hover:text-[#0A66C2]"></i>
+              <span>Tomás Garignani</span>
+            </a>
+          </li>
+
+          <!-- Santiago -->
+          <li class="flex items-center gap-2 group">
+            <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/5 border border-white/10 text-[11px] text-slate-300">SR</span>
+            <a
+              href="https://www.linkedin.com/in/santiagorusso/"
+              target="_blank" rel="noopener"
+              class="inline-flex items-center gap-1.5 hover:text-[#0A66C2] transition-colors"
+              aria-label="LinkedIn de Santiago Russó (se abre en una nueva pestaña)"
+            >
+              <i data-lucide="linkedin" class="w-4 h-4 transition-colors group-hover:text-[#0A66C2]"></i>
+              <span>Santiago Russó</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Navegación y créditos -->
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div>© <span id="year"></span> — Ingeniería Industrial · UNCuyo</div>
+        <div class="flex gap-4">
+          <a class="link" href="#encuesta">Encuesta</a>
+          <a class="link" href="#novedades">Novedades</a>
+          <a class="link" href="#resultados">Resultados</a>
+          <a class="link" href="#sobre">Sobre</a>
+        </div>
       </div>
     </div>
   </footer>
+
 
   <!-- SCRIPT -->
   <script>
